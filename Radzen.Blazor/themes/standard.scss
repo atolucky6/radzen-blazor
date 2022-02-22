@@ -16,11 +16,10 @@ $rz-base-700: #707072 !default;
 $rz-base-800: #4f4f50 !default;
 $rz-base-900: #262526 !default;
 
-$rz-primary: rgba(0, 92, 153, 1)!default;
-$rz-primary-light: rgb(31, 110, 163) !default; /*lighten($rz-primary, 8%);*/
-$rz-primary-dark: rgb(0, 78, 131) !default; /*darken($rz-primary, 10%);*/
+$rz-primary: #1151F3 !default;
+$rz-primary-light: #376df5 !default; /*lighten($rz-primary, 8%);*/
+$rz-primary-dark: #0e44cc !default; /*darken($rz-primary, 10%);*/
 $rz-primary-lighter: rgba($rz-primary, .16) !default;
-$rz-selected-background: rgba(0, 92, 153, .1) !default;
 
 $rz-secondary: $rz-primary !default;
 $rz-secondary-light: $rz-primary-light !default;
@@ -102,11 +101,11 @@ $state-danger-bg: $danger !default;
 $state-info-bg: $info !default;
 
 $body-bg: $rz-base-100 !default;
-$font-family-sans-serif: 'Segoe UI', Roboto, 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-  'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
+$font-family-sans-serif: 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
+  'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
   'Segoe UI Emoji', 'Segoe UI Symbol' !default;
 
-$rz-border-radius: 0 !default;
+$rz-border-radius: 0.25rem !default;
 
 $icon-base-font-size: 1.25rem !default;
 
@@ -512,8 +511,8 @@ $steps-number-background-color: $rz-base-300 !default;
 $steps-number-border-radius: 50% !default;
 $steps-number-color: $body-color !default;
 $steps-number-padding: 0.5rem 0 !default;
-$steps-number-selected-background: $rz-selected-background !default;
-$steps-number-selected-color: $rz-primary !default;
+$steps-number-selected-background: $rz-primary !default;
+$steps-number-selected-color: $rz-white !default;
 
 $steps-title-selected-color: $rz-primary !default;
 $steps-title-margin: 0 1rem 0 0.5rem !default;
@@ -558,7 +557,7 @@ $tabs-selected-tab-color: $rz-base-900 !default;
 $tabs-tab-font-size: 0.875rem !default;
 $tabs-tab-font-weight: normal !default;
 $tabs-background-color: $rz-white !default;
-$tabs-tab-padding: 0.3rem 1rem !default;
+$tabs-tab-padding: 0.5rem 1rem !default;
 $tabs-padding: 1.25rem !default;
 $tabs-tab-selected-top-border-color: $rz-primary !default;
 $tabs-hover-color: $rz-primary !default;
@@ -812,8 +811,8 @@ $paginator-button-size: ".rz-button-md" !default;
 // Tree
 
 $tree-node-padding: 0.25rem !default;
-$tree-node-selected-background-color: $rz-selected-background !default;
-$tree-node-selected-color: $rz-primary !default;
+$tree-node-selected-background-color: $rz-primary !default;
+$tree-node-selected-color: $rz-white !default;
 $tree-node-selected-border-radius: $rz-border-radius !default;
 $tree-node-margin: 1px 0 !default;
 $tree-node-hover-background-color: $rz-primary-lighter !default;
@@ -925,7 +924,7 @@ $panel-shadow: none !default;
 // Input components
 
 $input-font-size: 0.875rem !default;
-$input-height: 1.9rem;
+$input-height: 2.25rem;
 $input-line-height: 1.429 !default;
 $input-padding: 0.4375rem !default;
 $input-value-color: $rz-base-800 !default;
@@ -990,8 +989,8 @@ $datepicker-calendar-font-size: 0.875rem !default;
 $datepicker-calendar-color: $body-color !default;
 $datepicker-calendar-hover-color: $rz-primary !default;
 $datepicker-calendar-hover-background-color: $rz-primary-lighter !default;
-$datepicker-calendar-selected-color: $rz-primary !default;
-$datepicker-calendar-selected-background-color: $rz-selected-background !default;
+$datepicker-calendar-selected-color: $rz-white !default;
+$datepicker-calendar-selected-background-color: $rz-primary !default;
 $datepicker-calendar-selected-hover-color: $rz-white !default;
 $datepicker-calendar-selected-hover-background-color: $rz-primary-light !default;
 $datepicker-calendar-border: none !default;
@@ -1313,8 +1312,8 @@ $editor-button-padding: 0.5rem !default;
 $editor-button-background-color: $rz-base-100 !default;
 $editor-button-color: $body-color !default;
 $editor-button-disabled-color: $rz-base-400 !default;
-$editor-button-selected-background-color: $rz-selected-background !default;
-$editor-button-selected-color: $rz-primary !default;
+$editor-button-selected-background-color: $rz-primary !default;
+$editor-button-selected-color: $rz-white !default;
 $editor-separator-background-color: $rz-base-200 !default;
 $editor-content-background-color: $input-background-color !default;
 

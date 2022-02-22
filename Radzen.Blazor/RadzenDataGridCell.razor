@@ -1,13 +1,9 @@
-@implements IDisposable
-@using System.ComponentModel
 @typeparam TItem
-
 <td @attributes="@Attributes" style="@GetStyle()" class="@GetCssClass()" @onclick="@OnClick" @ondblclick="@OnDblClick" @oncontextmenu="@OnContextMenu" @oncontextmenu:preventDefault="@Grid.CellContextMenu.HasDelegate">
     <CascadingValue Value=this>
         @ChildContent
     </CascadingValue>
 </td>
-
 @code {
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object> Attributes { get; set; }
@@ -29,46 +25,6 @@
 
     [Parameter]
     public RadzenDataGrid<TItem> Grid { get; set; }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            if (Column != null)
-            {
-                if (Column.UsePropertyChanged && !string.IsNullOrWhiteSpace(Column.Property))
-                {
-                    if (Item is INotifyPropertyChanged itemPropertyChanged)
-                    {
-                        itemPropertyChanged.PropertyChanged += OnPropertyChanged;
-                    }
-                }
-            }
-        }
-        base.OnAfterRender(firstRender);
-    }
-
-    private async void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        if (string.IsNullOrWhiteSpace(e.PropertyName) || e.PropertyName == Column.Property)
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
-    public void Dispose()
-    {
-            if (Column != null)
-            {
-                if (Column.UsePropertyChanged && !string.IsNullOrWhiteSpace(Column.Property))
-                {
-                    if (Item is INotifyPropertyChanged itemPropertyChanged)
-                    {
-                        itemPropertyChanged.PropertyChanged -= OnPropertyChanged;
-                    }
-                }
-            }
-    }
 
     async Task OnContextMenu(MouseEventArgs args)
     {
@@ -119,7 +75,7 @@
 
     async Task OnClick(MouseEventArgs args)
     {
-        if (Grid != null && Column != null && Column.Clickable)
+        if (Grid != null)
         {
 #if NET5
             await Grid.OnRowClick(new DataGridRowMouseEventArgs<TItem>

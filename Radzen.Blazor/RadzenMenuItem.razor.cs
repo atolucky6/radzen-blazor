@@ -86,20 +86,11 @@ namespace Radzen.Blazor
         public RadzenMenu Parent { get; set; }
 
         /// <summary>
-        /// Gets or sets the click callback.
-        /// </summary>
-        /// <value>The click callback.</value>
-        [Parameter]
-        public EventCallback Click { get; set; }
-
-        /// <summary>
         /// Handles the <see cref="E:Click" /> event.
         /// </summary>
         /// <param name="args">The <see cref="MouseEventArgs"/> instance containing the event data.</param>
         public async Task OnClick(MouseEventArgs args)
         {
-            await Click.InvokeAsync(this);
-
             if (Parent != null)
             {
                 var eventArgs = new MenuItemEventArgs 

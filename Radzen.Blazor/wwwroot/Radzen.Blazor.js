@@ -20,12 +20,6 @@ var resolveCallbacks = [];
 var rejectCallbacks = [];
 
 window.Radzen = {
-    clearValue: function (id) {
-        var el = document.getElementById(id);
-        if (el) {
-            el.value = '';
-        }
-    },
     mask: function (id, mask, pattern, characterPattern) {
       var el = document.getElementById(id);
       if (el) {

@@ -8,52 +8,48 @@
 @if (Visible)
 {
     <div @ref="@Element" style="@Style" @attributes="Attributes" class="@GetCssClass()" id="@GetId()">
-        <div class="rz-fileupload-buttonbar">
-            <span class="@ChooseClassList" label="Choose" tabindex="@TabIndex">
-                <input id="@Id" disabled="@Disabled" @ref="@fileUpload" name="@Name" type="file" accept="@Accept"
-                    @onchange="@OnChange" />
-                <span class="rz-button-text">@ChooseText</span>
-            </span>
-        </div>
-
-        @if (ShowValue)
-        {
-            <div class="rz-fileupload-content rz-corner-bottom">
-                @if (!object.Equals(Value, default(TValue)))
-                {
-                    <div class="rz-fileupload-files">
-                        <div class="rz-fileupload-row">
-                            <div>
-                                @if (IsImage)
-                                {
-                                    <img style="@ImageStyle" src="@Value">
-                                }
-                            </div>
-                            <div>
-                                @if (!string.IsNullOrEmpty(Title))
-                                {
-                                    <span>@Title</span>
-                                }
-                                else if (!string.IsNullOrEmpty(name))
-                                {
-                                    <span>@name</span>
-                                }
-                            </div>
-                            <div>
-                                @if (size != null)
-                                {
-                                    <span>@size</span>
-                                }
-                            </div>
-                            <div tabindex="@TabIndex">
-                                <button disabled="@Disabled" type="button" class="@ButtonClassList">
-                                    <span class="rz-button-icon-left rz-icon-trash" style="display:block" @onclick="@Remove"></span>
-                                </button>
-                            </div>
+    <div class="rz-fileupload-buttonbar">
+        <span class="@ChooseClassList" label="Choose" tabindex="@TabIndex">
+            <input disabled="@Disabled" @ref="@fileUpload" name="@Name" type="file" accept="@Accept"
+                @onchange="@OnChange" />
+            <span class="rz-button-text">@ChooseText</span>
+        </span>
+    </div>
+    <div class="rz-fileupload-content rz-corner-bottom">
+        @if (!object.Equals(Value, default(TValue)))
+            {
+                <div class="rz-fileupload-files">
+                    <div class="rz-fileupload-row">
+                        <div>
+                            @if (IsImage)
+                            {
+                                <img style="@ImageStyle" src="@Value">
+                            }
+                        </div>
+                        <div>
+                            @if (!string.IsNullOrEmpty(Title))
+                            {
+                                <span>@Title</span>
+                            }
+                            else if (!string.IsNullOrEmpty(name))
+                            {
+                                <span>@name</span>
+                            }
+                        </div>
+                        <div>
+                            @if (size != null)
+                            {
+                                <span>@size</span>
+                            }
+                        </div>
+                        <div tabindex="@TabIndex">
+                            <button disabled="@Disabled" type="button" class="@ButtonClassList">
+                                <span class="rz-button-icon-left rz-icon-trash" style="display:block" @onclick="@Remove"></span>
+                            </button>
                         </div>
                     </div>
-                }
-            </div>
-        }
+                </div>
+            }
+        </div>
     </div>
 }
