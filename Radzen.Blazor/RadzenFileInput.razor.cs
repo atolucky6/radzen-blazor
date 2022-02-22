@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Radzen.Blazor.Rendering;
 using System;
@@ -94,7 +95,7 @@ namespace Radzen.Blazor
 
             try
             {
-                uploadValue = await JSRuntime.InvokeAsync<string>("Radzen.readFileAsBase64", fileUpload, MaxFileSize);
+                uploadValue = await JSRuntime.InvokeAsync<string>("Radzen.readFileAsBase64", fileUpload, MaxFileSize, MaxWidth, MaxHeight);
 
                 if (typeof(TValue) == typeof(byte[]))
                 {
@@ -133,6 +134,37 @@ namespace Radzen.Blazor
         [Parameter]
         public EventCallback<UploadErrorEventArgs> Error { get; set; }
 
+        /// <summary>
+        /// Gets or sets the image click callback.
+        /// </summary>
+        /// <value>The image click callback.</value>
+        [Parameter]
+        public EventCallback<MouseEventArgs> ImageClick { get; set; }
+
+        bool clicking;
+        /// <summary>
+        /// Handles the <see cref="E:ImageClick" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="MouseEventArgs"/> instance containing the event data.</param>
+        public async Task OnImageClick(MouseEventArgs args)
+        {
+            if (clicking)
+            {
+                return;
+            }
+
+            try
+            {
+                clicking = true;
+
+                await ImageClick.InvokeAsync(args);
+            }
+            finally
+            {
+                clicking = false;
+            }
+        }
+
         async System.Threading.Tasks.Task Remove(EventArgs args)
         {
             Value = default(TValue);
@@ -157,6 +189,20 @@ namespace Radzen.Blazor
         /// <value>The maximum size of the file.</value>
         [Parameter]
         public int MaxFileSize { get; set; } = 5 * 1024 * 1024;
+
+        /// <summary>
+        /// Gets or sets the maximum width of the file, keeping aspect ratio.
+        /// </summary>
+        /// <value>The maximum width of the file.</value>
+        [Parameter]
+        public int MaxWidth { get; set; } = 0;
+
+        /// <summary>
+        /// Gets or sets the maximum height of the file, keeping aspect ratio.
+        /// </summary>
+        /// <value>The maximum height of the file.</value>
+        [Parameter]
+        public int MaxHeight { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets the image style.
