@@ -312,7 +312,7 @@ namespace Radzen.Blazor
             return string.Join("", $"{UniqueID}".Split('.')) + column.GetFilterProperty();
         }
 
-        string getFilterDateFormat(RadzenDataGridColumn<TItem> column)
+        internal string getFilterDateFormat(RadzenDataGridColumn<TItem> column)
         {
             if (column != null && !string.IsNullOrEmpty(column.FormatString))
             {
@@ -330,7 +330,7 @@ namespace Radzen.Blazor
             return FilterDateFormat;
         }
 
-        RenderFragment DrawNumericFilter(RadzenDataGridColumn<TItem> column, bool force = true, bool isFirst = true)
+        internal RenderFragment DrawNumericFilter(RadzenDataGridColumn<TItem> column, bool force = true, bool isFirst = true)
         {
             return new RenderFragment(builder =>
             {
@@ -426,7 +426,7 @@ namespace Radzen.Blazor
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         /// <param name="column">The column.</param>
-        protected void OnSort(EventArgs args, RadzenDataGridColumn<TItem> column)
+        internal void OnSort(EventArgs args, RadzenDataGridColumn<TItem> column)
         {
             if (AllowSorting && column.Sortable)
             {

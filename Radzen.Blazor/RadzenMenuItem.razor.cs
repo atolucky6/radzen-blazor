@@ -71,12 +71,12 @@ namespace Radzen.Blazor
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets the click callback.
-        ///// </summary>
-        ///// <value>The click callback.</value>
-        //[Parameter]
-        //public EventCallback<MenuItemEventArgs> Click { get; set; }
+        /// <summary>
+        /// Gets or sets the click callback.
+        /// </summary>
+        /// <value>The click callback.</value>
+        [Parameter]
+        public EventCallback<MenuItemEventArgs> Click { get; set; }
 
         /// <summary>
         /// Gets or sets the parent.
