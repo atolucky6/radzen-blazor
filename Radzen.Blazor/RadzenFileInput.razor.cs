@@ -39,6 +39,7 @@ namespace Radzen.Blazor
         /// <value>The choose class list.</value>
         ClassList ChooseClassList => ClassList.Create("rz-fileupload-choose rz-button btn-secondary")
                                               .AddDisabled(Disabled);
+
         /// <summary>
         /// Gets the button class list.
         /// </summary>
@@ -108,6 +109,15 @@ namespace Radzen.Blazor
             {
                 await Error.InvokeAsync(new UploadErrorEventArgs() { Message = $"Unable to read file as base64 string. {ex.Message}" });
             }
+        }
+
+        /// <summary>
+        /// Clear value of input
+        /// </summary>
+        /// <returns></returns>
+        public Task ClearValue()
+        {
+            return Task.CompletedTask;
         }
 
         /// <summary>

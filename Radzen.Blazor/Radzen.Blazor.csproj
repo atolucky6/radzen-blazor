@@ -53,16 +53,184 @@
     <Sass Include="$(MSBuildProjectDirectory)/themes/*.scss" Exclude="$(MSBuildProjectDirectory)/themes/_*.scss" Condition="'$(TargetFramework)' == 'net5.0'" />
   </ItemGroup>
 
+  <ItemGroup>
+    <SassFile Include="themes\bootstrap\scss\bootstrap-grid.scss" />
+    <SassFile Include="themes\bootstrap\scss\bootstrap-reboot.scss" />
+    <SassFile Include="themes\bootstrap\scss\bootstrap.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_alert.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_background-variant.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_badge.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_border-radius.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_box-shadow.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_breakpoints.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_buttons.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_caret.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_clearfix.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_deprecate.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_float.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_forms.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_gradients.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_grid-framework.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_grid.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_hover.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_image.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_list-group.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_lists.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_nav-divider.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_pagination.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_reset-text.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_resize.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_screen-reader.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_size.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_table-row.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_text-emphasis.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_text-hide.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_text-truncate.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_transition.scss" />
+    <SassFile Include="themes\bootstrap\scss\mixins\_visibility.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_align.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_background.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_borders.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_clearfix.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_display.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_embed.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_flex.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_float.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_overflow.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_position.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_screenreaders.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_shadows.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_sizing.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_spacing.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_stretched-link.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_text.scss" />
+    <SassFile Include="themes\bootstrap\scss\utilities\_visibility.scss" />
+    <SassFile Include="themes\bootstrap\scss\vendor\_rfs.scss" />
+    <SassFile Include="themes\bootstrap\scss\_alert.scss" />
+    <SassFile Include="themes\bootstrap\scss\_badge.scss" />
+    <SassFile Include="themes\bootstrap\scss\_breadcrumb.scss" />
+    <SassFile Include="themes\bootstrap\scss\_button-group.scss" />
+    <SassFile Include="themes\bootstrap\scss\_buttons.scss" />
+    <SassFile Include="themes\bootstrap\scss\_card.scss" />
+    <SassFile Include="themes\bootstrap\scss\_carousel.scss" />
+    <SassFile Include="themes\bootstrap\scss\_close.scss" />
+    <SassFile Include="themes\bootstrap\scss\_code.scss" />
+    <SassFile Include="themes\bootstrap\scss\_custom-forms.scss" />
+    <SassFile Include="themes\bootstrap\scss\_dropdown.scss" />
+    <SassFile Include="themes\bootstrap\scss\_forms.scss" />
+    <SassFile Include="themes\bootstrap\scss\_functions.scss" />
+    <SassFile Include="themes\bootstrap\scss\_grid.scss" />
+    <SassFile Include="themes\bootstrap\scss\_images.scss" />
+    <SassFile Include="themes\bootstrap\scss\_input-group.scss" />
+    <SassFile Include="themes\bootstrap\scss\_jumbotron.scss" />
+    <SassFile Include="themes\bootstrap\scss\_list-group.scss" />
+    <SassFile Include="themes\bootstrap\scss\_media.scss" />
+    <SassFile Include="themes\bootstrap\scss\_mixins.scss" />
+    <SassFile Include="themes\bootstrap\scss\_modal.scss" />
+    <SassFile Include="themes\bootstrap\scss\_nav.scss" />
+    <SassFile Include="themes\bootstrap\scss\_navbar.scss" />
+    <SassFile Include="themes\bootstrap\scss\_pagination.scss" />
+    <SassFile Include="themes\bootstrap\scss\_popover.scss" />
+    <SassFile Include="themes\bootstrap\scss\_print.scss" />
+    <SassFile Include="themes\bootstrap\scss\_progress.scss" />
+    <SassFile Include="themes\bootstrap\scss\_reboot.scss" />
+    <SassFile Include="themes\bootstrap\scss\_root.scss" />
+    <SassFile Include="themes\bootstrap\scss\_spinners.scss" />
+    <SassFile Include="themes\bootstrap\scss\_tables.scss" />
+    <SassFile Include="themes\bootstrap\scss\_toasts.scss" />
+    <SassFile Include="themes\bootstrap\scss\_tooltip.scss" />
+    <SassFile Include="themes\bootstrap\scss\_transitions.scss" />
+    <SassFile Include="themes\bootstrap\scss\_type.scss" />
+    <SassFile Include="themes\bootstrap\scss\_utilities.scss" />
+    <SassFile Include="themes\bootstrap\scss\_variables.scss" />
+    <SassFile Include="themes\components\blazor\_accordion.scss" />
+    <SassFile Include="themes\components\blazor\_autocomplete.scss" />
+    <SassFile Include="themes\components\blazor\_badge.scss" />
+    <SassFile Include="themes\components\blazor\_body.scss" />
+    <SassFile Include="themes\components\blazor\_button.scss" />
+    <SassFile Include="themes\components\blazor\_card.scss" />
+    <SassFile Include="themes\components\blazor\_chart.scss" />
+    <SassFile Include="themes\components\blazor\_checkbox.scss" />
+    <SassFile Include="themes\components\blazor\_colorpicker.scss" />
+    <SassFile Include="themes\components\blazor\_common.scss" />
+    <SassFile Include="themes\components\blazor\_datalist.scss" />
+    <SassFile Include="themes\components\blazor\_datepicker.scss" />
+    <SassFile Include="themes\components\blazor\_dialog.scss" />
+    <SassFile Include="themes\components\blazor\_dropdown.scss" />
+    <SassFile Include="themes\components\blazor\_editor.scss" />
+    <SassFile Include="themes\components\blazor\_fieldset.scss" />
+    <SassFile Include="themes\components\blazor\_footer.scss" />
+    <SassFile Include="themes\components\blazor\_form.scss" />
+    <SassFile Include="themes\components\blazor\_gauge.scss" />
+    <SassFile Include="themes\components\blazor\_google-map.scss" />
+    <SassFile Include="themes\components\blazor\_gravatar.scss" />
+    <SassFile Include="themes\components\blazor\_grid.scss" />
+    <SassFile Include="themes\components\blazor\_header.scss" />
+    <SassFile Include="themes\components\blazor\_icons.scss" />
+    <SassFile Include="themes\components\blazor\_input.scss" />
+    <SassFile Include="themes\components\blazor\_layout.scss" />
+    <SassFile Include="themes\components\blazor\_link.scss" />
+    <SassFile Include="themes\components\blazor\_listbox.scss" />
+    <SassFile Include="themes\components\blazor\_login.scss" />
+    <SassFile Include="themes\components\blazor\_lookup.scss" />
+    <SassFile Include="themes\components\blazor\_mask.scss" />
+    <SassFile Include="themes\components\blazor\_menu.scss" />
+    <SassFile Include="themes\components\blazor\_navigation.scss" />
+    <SassFile Include="themes\components\blazor\_notification.scss" />
+    <SassFile Include="themes\components\blazor\_numeric.scss" />
+    <SassFile Include="themes\components\blazor\_overlay-panel.scss" />
+    <SassFile Include="themes\components\blazor\_paginator.scss" />
+    <SassFile Include="themes\components\blazor\_panel-menu.scss" />
+    <SassFile Include="themes\components\blazor\_panel.scss" />
+    <SassFile Include="themes\components\blazor\_profile-menu.scss" />
+    <SassFile Include="themes\components\blazor\_progressbar.scss" />
+    <SassFile Include="themes\components\blazor\_radio.scss" />
+    <SassFile Include="themes\components\blazor\_rating.scss" />
+    <SassFile Include="themes\components\blazor\_scheduler.scss" />
+    <SassFile Include="themes\components\blazor\_scrollbar.scss" />
+    <SassFile Include="themes\components\blazor\_selectbar.scss" />
+    <SassFile Include="themes\components\blazor\_sidebar-toggle.scss" />
+    <SassFile Include="themes\components\blazor\_sidebar.scss" />
+    <SassFile Include="themes\components\blazor\_slider.scss" />
+    <SassFile Include="themes\components\blazor\_splitbutton.scss" />
+    <SassFile Include="themes\components\blazor\_splitter.scss" />
+    <SassFile Include="themes\components\blazor\_ssrsviewer.scss" />
+    <SassFile Include="themes\components\blazor\_steps.scss" />
+    <SassFile Include="themes\components\blazor\_switch.scss" />
+    <SassFile Include="themes\components\blazor\_tabs.scss" />
+    <SassFile Include="themes\components\blazor\_textarea.scss" />
+    <SassFile Include="themes\components\blazor\_textbox.scss" />
+    <SassFile Include="themes\components\blazor\_tooltip.scss" />
+    <SassFile Include="themes\components\blazor\_tree.scss" />
+    <SassFile Include="themes\components\blazor\_upload.scss" />
+    <SassFile Include="themes\dark-base.scss" />
+    <SassFile Include="themes\dark.scss" />
+    <SassFile Include="themes\default-base.scss" />
+    <SassFile Include="themes\default.scss" />
+    <SassFile Include="themes\humanistic-base.scss" />
+    <SassFile Include="themes\humanistic.scss" />
+    <SassFile Include="themes\software-base.scss" />
+    <SassFile Include="themes\software.scss" />
+    <SassFile Include="themes\standard-base.scss" />
+    <SassFile Include="themes\standard.scss" />
+    <SassFile Include="themes\_bootstrap.scss" />
+    <SassFile Include="themes\_colors.scss" />
+    <SassFile Include="themes\_components.scss" />
+    <SassFile Include="themes\_fonts.scss" />
+    <SassFile Include="themes\_typography.scss" />
+    <SassFile Include="themes\_variables.scss" />
+  </ItemGroup>
+
  <Target Name="Sass" BeforeTargets="BeforeBuild" Condition="'$(TargetFramework)' == 'net5.0'">
     <PropertyGroup>
-      <_SassFileList>@(Sass->'&quot;%(FullPath)&quot;', ' ')</_SassFileList>
+      <_SassFileList>@(Sass->'"%(FullPath)"', ' ')</_SassFileList>
       <LibSassBuilderArgs>files $(_SassFileList) --outputstyle $(LibSassOutputStyle) --level $(LibSassOutputLevel)</LibSassBuilderArgs>
     </PropertyGroup>
     <Message Text="$(LibSassBuilderArgs)" Importance="$(LibSassMessageLevel)" />
     <Message Text="Converted SassFile list to argument" Importance="$(LibSassMessageLevel)" />
   </Target>
 
-  <Target Name="MoveCss" AfterTargets="AfterCompile" Condition="'$(TargetFramework)' == 'net5.0'" >
+  <Target Name="MoveCss" AfterTargets="AfterCompile" Condition="'$(TargetFramework)' == 'net5.0'">
     <ItemGroup>
         <CssFile Include="$(MSBuildProjectDirectory)/themes/*.css" />
     </ItemGroup>

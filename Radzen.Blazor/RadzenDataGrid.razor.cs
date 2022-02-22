@@ -155,6 +155,16 @@ namespace Radzen.Blazor
             });
         }
 
+        /// <summary>
+        /// Check the row is selected
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool IsRowSelected(TItem item)
+        {
+            return false;
+        }
+
         internal void DrawGroupOrDataRows(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder, IList<RadzenDataGridColumn<TItem>> visibleColumns)
         {
             if (groups.Any())
@@ -1601,6 +1611,27 @@ namespace Radzen.Blazor
         public async System.Threading.Tasks.Task SelectRow(TItem item)
         {
             await OnRowSelect(item, true);
+        }
+
+        /// <summary>
+        /// Selects the row and deselect others
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="deselectOthers"></param>
+        /// <returns></returns>
+        public async Task SelectRow(TItem item, bool deselectOthers)
+        {
+
+        }
+
+        /// <summary>
+        /// Deselect the row
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public async Task DeselectRow(TItem item)
+        {
+
         }
 
         internal async System.Threading.Tasks.Task OnRowDblClick(DataGridRowMouseEventArgs<TItem> args)

@@ -36,6 +36,12 @@ namespace Radzen.Blazor
         [CascadingParameter]
         public RadzenDataGridColumn<TItem> Parent { get; set; }
 
+        /// <summary>
+        /// Enabled select row on click
+        /// </summary>
+        [Parameter]
+        public bool Clickable { get; set; } = true;
+
         internal void RemoveColumn(RadzenDataGridColumn<TItem> column)
         {
             if (Grid.childColumns.Contains(column))
