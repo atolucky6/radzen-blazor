@@ -22,6 +22,12 @@ namespace Radzen.Blazor
         [CascadingParameter]
         public RadzenDataGrid<TItem> Grid { get; set; }
 
+        [Parameter]
+        public bool Clickable { get; set; } = true;
+
+        [Parameter]
+        public bool UsePropertyChanged { get; set; } = false;
+
         /// <summary>
         /// Called when initialized.
         /// </summary>

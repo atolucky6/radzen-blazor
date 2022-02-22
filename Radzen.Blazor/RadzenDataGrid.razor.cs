@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -1412,10 +1413,10 @@ namespace Radzen.Blazor
         internal async Task OnRowClick(DataGridRowMouseEventArgs<TItem> args)
         {
             await RowClick.InvokeAsync(args);
-            await OnRowSelect(args.Data);
+            await OnRowSelect(args.Data, true, true);
         }
 
-        internal async System.Threading.Tasks.Task OnRowSelect(object item, bool raiseChange = true)
+        internal async System.Threading.Tasks.Task OnRowSelect(object item, bool deselectOther, bool raiseChange)
         {
             if (SelectionMode == DataGridSelectionMode.Single && item != null && selectedItems.Keys.Contains((TItem)item))
             {
@@ -1439,6 +1440,16 @@ namespace Radzen.Blazor
 
             if (item != null)
             {
+                if (deselectOther && selectedItems.Keys.Any())
+                {
+                    var itemToDeselects = selectedItems.Keys.Where(x => !Equals(item, x));
+                    foreach (var itemToDeselect in itemToDeselects)
+                    {
+                        selectedItems.Remove(itemToDeselect);
+                        await RowDeselect.InvokeAsync(itemToDeselect);
+                    }
+                }
+
                 if (!selectedItems.Keys.Contains((TItem)item))
                 {
                     selectedItems.Add((TItem)item, true);
@@ -1449,8 +1460,8 @@ namespace Radzen.Blazor
                 }
                 else
                 {
-                    selectedItems.Remove((TItem)item);
-                    await RowDeselect.InvokeAsync((TItem)item);
+                    //selectedItems.Remove((TItem)item);
+                    //await RowDeselect.InvokeAsync((TItem)item);
                 }
             }
             else
@@ -1470,13 +1481,52 @@ namespace Radzen.Blazor
             StateHasChanged();
         }
 
+        internal async Task OnRowDeselect(object item)
+        {
+            bool hasChanged = false;
+            if (selectedItems.Keys.Contains((TItem)item))
+            {
+                selectedItems.Remove((TItem)item);
+                await RowDeselect.InvokeAsync((TItem)item);
+                hasChanged = true;
+            }
+
+            if (hasChanged)
+            {
+                var value = selectedItems.Keys;
+
+                _value = SelectionMode == DataGridSelectionMode.Multiple ? new List<TItem>(value) : new List<TItem>() { value.FirstOrDefault() };
+
+                await ValueChanged.InvokeAsync(_value);
+
+                StateHasChanged();
+            }
+        }
+
+        public bool IsRowSelected(TItem item)
+        {
+            if (selectedItems == null)
+            {
+                return false;
+            }
+            else
+            {
+                return selectedItems.ContainsKey(item);
+            }
+        }
+
         /// <summary>
         /// Selects the row.
         /// </summary>
         /// <param name="item">The item.</param>
-        public async System.Threading.Tasks.Task SelectRow(TItem item)
+        public async System.Threading.Tasks.Task SelectRow(TItem item, bool deselectOther)
         {
-            await OnRowSelect(item, true);
+            await OnRowSelect(item, deselectOther, true);
+        }
+
+        public async Task DeselectRow(TItem item)
+        {
+            await OnRowDeselect(item);
         }
 
         internal async System.Threading.Tasks.Task OnRowDblClick(DataGridRowMouseEventArgs<TItem> args)
@@ -1556,7 +1606,7 @@ namespace Radzen.Blazor
         public async System.Threading.Tasks.Task UpdateRow(TItem item)
         {
             if (editedItems.Keys.Contains(item))
-            {
+            { 
                 var editContext = editContexts[item];
 
                 if (editContext.Validate())

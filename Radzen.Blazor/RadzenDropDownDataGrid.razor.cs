@@ -375,7 +375,7 @@ namespace Radzen.Blazor
 
                     if (item != null && (!Multiple ? selectedItem != item : true))
                     {
-                        await grid.OnRowSelect(item, false);
+                        await grid.OnRowSelect(item, false, false);
                     }
                 }
                 catch (Exception)

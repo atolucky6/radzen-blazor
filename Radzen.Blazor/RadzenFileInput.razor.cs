@@ -32,6 +32,9 @@ namespace Radzen.Blazor
         [Parameter]
         public string Title { get; set; }
 
+        [Parameter]
+        public bool ShowValue { get; set; }
+
         /// <summary>
         /// Gets the choose class list.
         /// </summary>
@@ -44,6 +47,11 @@ namespace Radzen.Blazor
         /// <value>The button class list.</value>
         ClassList ButtonClassList => ClassList.Create("rz-button rz-button-icon-only btn-light")
                                               .AddDisabled(Disabled);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         /// <inheritdoc />
         protected override string GetComponentCssClass()
@@ -107,6 +115,15 @@ namespace Radzen.Blazor
             {
                 await Error.InvokeAsync(new UploadErrorEventArgs() { Message = $"Unable to read file as base64 string. {ex.Message}" });
             }
+        }
+
+        /// <summary>   
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task ClearValue()
+        {
+            await JSRuntime.InvokeVoidAsync("Radzen.clearValue", Id);
         }
 
         /// <summary>
