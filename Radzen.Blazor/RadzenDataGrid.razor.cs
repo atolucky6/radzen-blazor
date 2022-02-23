@@ -151,7 +151,7 @@ namespace Radzen.Blazor
                 }
 #else
                 DrawGroupOrDataRows(builder, visibleColumns);
-#endif
+    #endif
             });
         }
 
@@ -194,13 +194,6 @@ namespace Radzen.Blazor
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether DataGrid data cells will follow the header cells structure in composite columns.
-        /// </summary>
-        /// <value><c>true</c> if DataGrid data cells will follow the header cells structure in composite columns; otherwise, <c>false</c>.</value>
-        [Parameter]
-        public bool AllowCompositeDataCells { get; set; } = false;
-
-        /// <summary>
         /// Gets or sets a value indicating whether DataGrid is responsive.
         /// </summary>
         /// <value><c>true</c> if DataGrid is Responsive; otherwise, <c>false</c>.</value>
@@ -219,9 +212,9 @@ namespace Radzen.Blazor
         {
             get
             {
-                if (_groupedPagedView == null)
+                if(_groupedPagedView == null)
                 {
-                    var query = groups.Count(g => g.SortOrder == null) == Groups.Count ? View : View.OrderBy(string.Join(',', groups.Select(g => $"np({g.Property}) {(g.SortOrder == null ? "" : g.SortOrder == SortOrder.Ascending ? " asc" : " desc")}")));
+                    var query = View.OrderBy(string.Join(',', groups.Select(g => $"np({g.Property})")));
                     var v = (AllowPaging && !LoadData.HasDelegate ? query.Skip(skip).Take(PageSize) : query).ToList().AsQueryable();
                     _groupedPagedView = v.GroupByMany(groups.Select(g => $"np({g.Property})").ToArray()).ToList();
                 }
@@ -231,7 +224,7 @@ namespace Radzen.Blazor
 
         internal string getFrozenColumnClass(RadzenDataGridColumn<TItem> column, IList<RadzenDataGridColumn<TItem>> visibleColumns)
         {
-            return column.IsFrozen() ? "rz-frozen-cell" : "";
+            return column.Frozen ? "rz-frozen-cell" : "";
         }
 
         /// <summary>
@@ -276,11 +269,7 @@ namespace Radzen.Blazor
             column.SetFilterOperator(filterOperator);
         }
 
-        private List<RadzenDataGridColumn<TItem>> columns = new List<RadzenDataGridColumn<TItem>>();
-        internal readonly List<RadzenDataGridColumn<TItem>> childColumns = new List<RadzenDataGridColumn<TItem>>();
-        private List<RadzenDataGridColumn<TItem>> allColumns = new List<RadzenDataGridColumn<TItem>>();
-        private List<RadzenDataGridColumn<TItem>> allPickableColumns = new List<RadzenDataGridColumn<TItem>>();
-        internal object selectedColumns;
+        private readonly List<RadzenDataGridColumn<TItem>> columns = new List<RadzenDataGridColumn<TItem>>();
 
         /// <summary>
         /// Gets or sets the columns.
@@ -289,64 +278,21 @@ namespace Radzen.Blazor
         [Parameter]
         public RenderFragment Columns { get; set; }
 
-        internal void UpdateColumnsOrder()
-        {
-            if (allColumns.Any(c => c.GetOrderIndex().HasValue))
-            {
-                var columnsWithoutOrderIndex = columns.Where(c => !c.GetOrderIndex().HasValue).ToList();
-                for (var i = 0; i < columnsWithoutOrderIndex.Count; i++)
-                {
-                    columnsWithoutOrderIndex[i].SetOrderIndex(columns.IndexOf(columnsWithoutOrderIndex[i]));
-                }
-
-                columns = columns.OrderBy(c => c.GetOrderIndex()).ToList();
-
-                if (AllowColumnPicking)
-                {
-                    allPickableColumns = allColumns.Where(c => c.Pickable).OrderBy(c => c.GetOrderIndex()).ToList();
-                }
-            }
-        }
-
         internal void AddColumn(RadzenDataGridColumn<TItem> column)
         {
-            if (!columns.Contains(column) && column.Parent == null)
+            if (!columns.Contains(column))
             {
                 columns.Add(column);
-            }
 
-            if (!childColumns.Contains(column) && column.Parent != null)
-            {
-                childColumns.Add(column);
-
-                var level = column.GetLevel();
-                if (level > deepestChildColumnLevel)
+                var descriptor = sorts.Where(d => d.Property == column?.GetSortProperty()).FirstOrDefault();
+                if (descriptor == null && column.SortOrder.HasValue)
                 {
-                    deepestChildColumnLevel = level;
+                    descriptor = new SortDescriptor() { Property = column.Property, SortOrder = column.SortOrder.Value };
+                    sorts.Add(descriptor);
                 }
+
+                StateHasChanged();
             }
-
-            var descriptor = sorts.Where(d => d.Property == column?.GetSortProperty()).FirstOrDefault();
-            if (descriptor == null && column.SortOrder.HasValue)
-            {
-                descriptor = new SortDescriptor() { Property = column.Property, SortOrder = column.SortOrder.Value };
-                sorts.Add(descriptor);
-            }
-
-            if (!allColumns.Contains(column))
-            {
-                allColumns.Add(column);
-            }
-
-            if (AllowColumnPicking)
-            {
-                selectedColumns = allColumns;
-                allPickableColumns = allColumns.Where(c => c.Pickable).ToList();
-            }
-
-            UpdateColumnsOrder();
-
-            StateHasChanged();
         }
 
         internal void RemoveColumn(RadzenDataGridColumn<TItem> column)
@@ -354,23 +300,10 @@ namespace Radzen.Blazor
             if (columns.Contains(column))
             {
                 columns.Remove(column);
-            }
-
-            if (childColumns.Contains(column))
-            {
-                childColumns.Remove(column);
-            }
-
-            if (allColumns.Contains(column))
-            {
-                allColumns.Remove(column);
-            }
-
-            UpdateColumnsOrder();
-
-            if (!disposed)
-            {
-                try { InvokeAsync(StateHasChanged); } catch { }
+                if (!disposed)
+                {
+                    try { InvokeAsync(StateHasChanged); } catch { }
+                }
             }
         }
 
@@ -427,12 +360,12 @@ namespace Radzen.Blazor
                 builder.AddAttribute(3, "Change", eventCallbackGenericCreate.Invoke(this,
                     new object[] { this, eventCallbackGenericAction.Invoke(this, new object[] { action }) }));
 
-                if (FilterMode == FilterMode.Advanced)
+                if(FilterMode == FilterMode.Advanced)
                 {
                     builder.AddAttribute(4, "oninput", EventCallback.Factory.Create<ChangeEventArgs>(this, args => {
                         var value = $"{args.Value}";
                         column.SetFilterValue(!string.IsNullOrWhiteSpace(value) ? Convert.ChangeType(value, Nullable.GetUnderlyingType(type)) : null, isFirst);
-                    }));
+                    } ));
                 }
 
                 builder.CloseComponent();
@@ -480,6 +413,19 @@ namespace Radzen.Blazor
             }
         }
 
+        private string getFilterIconCss(RadzenDataGridColumn<TItem> column)
+        {
+            var additionalStyle = column.GetFilterValue() != null || column.GetSecondFilterValue() != null || 
+                column.GetFilterOperator() == FilterOperator.IsNotNull || column.GetFilterOperator() == FilterOperator.IsNull 
+                    ? "rz-grid-filter-active" : "";
+            return $"rzi rz-grid-filter-icon {additionalStyle}";
+        }
+
+        /// <summary>
+        /// Called when sort.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="column">The column.</param>
         internal void OnSort(EventArgs args, RadzenDataGridColumn<TItem> column)
         {
             if (AllowSorting && column.Sortable)
@@ -503,14 +449,27 @@ namespace Radzen.Blazor
             }
         }
 
-        internal async Task ClearFilter(RadzenDataGridColumn<TItem> column, bool closePopup = false)
+        /// <summary>
+        /// Clears the filter.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="closePopup">if set to <c>true</c> [close popup].</param>
+        protected async Task ClearFilter(RadzenDataGridColumn<TItem> column, bool closePopup = false)
         {
             if (closePopup)
             {
                 await JSRuntime.InvokeVoidAsync("Radzen.closePopup", $"{PopupID}{column.GetFilterProperty()}");
             }
+            column.SetFilterValue(null);
+            column.SetFilterValue(null, false);
+            column.SetFilterOperator(null);
+            column.SetSecondFilterOperator(null);
 
-            column.ClearFilters();
+            column.FilterValue = null;
+            column.SecondFilterValue = null;
+            column.FilterOperator = default(FilterOperator);
+            column.SecondFilterOperator = default(FilterOperator);
+            column.LogicalFilterOperator = default(LogicalFilterOperator);
 
             skip = 0;
             CurrentPage = 0;
@@ -523,7 +482,12 @@ namespace Radzen.Blazor
             await InvokeAsync(Reload);
         }
 
-        internal async Task ApplyFilter(RadzenDataGridColumn<TItem> column, bool closePopup = false)
+        /// <summary>
+        /// Applies the filter.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="closePopup">if set to <c>true</c> [close popup].</param>
+        protected async Task ApplyFilter(RadzenDataGridColumn<TItem> column, bool closePopup = false)
         {
             if (closePopup)
             {
@@ -551,17 +515,6 @@ namespace Radzen.Blazor
             if (HeaderCellRender != null)
             {
                 HeaderCellRender(args);
-            }
-
-            var sortOrder = column.GetSortOrder();
-            switch (sortOrder)
-            {
-                case SortOrder.Ascending:
-                    args.Attributes.Add("aria-sort", "ascending");
-                    break;
-                case SortOrder.Descending:
-                    args.Attributes.Add("aria-sort", "descending");
-                    break;
             }
 
             return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object>(args.Attributes);
@@ -851,20 +804,6 @@ namespace Radzen.Blazor
         public bool AllowColumnReorder { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether column picking is allowed.
-        /// </summary>
-        /// <value><c>true</c> if column picking is allowed; otherwise, <c>false</c>.</value>
-        [Parameter]
-        public bool AllowColumnPicking { get; set; }
-
-        /// <summary>
-        /// Gets or sets the column picker columns showing text.
-        /// </summary>
-        /// <value>The column picker columns showing text.</value>
-        [Parameter]
-        public string ColumnsShowingText { get; set; } = "columns showing";
-
-        /// <summary>
         /// Gets or sets a value indicating whether grouping is allowed.
         /// </summary>
         /// <value><c>true</c> if grouping is allowed; otherwise, <c>false</c>.</value>
@@ -925,19 +864,12 @@ namespace Radzen.Blazor
                     columns.Remove(columnToReorder);
                     columns.Insert(actualColumnIndexTo, columnToReorder);
 
-                    columnToReorder.SetOrderIndex(columns.IndexOf(columnToReorder));
-                    columnToReorderTo.SetOrderIndex(columns.IndexOf(columnToReorderTo));
-
-                    UpdateColumnsOrder();
-
                     await ColumnReordered.InvokeAsync(new DataGridColumnReorderedEventArgs<TItem>
                     {
                         Column = columnToReorder,
                         OldIndex = actualColumnIndexFrom,
                         NewIndex = actualColumnIndexTo
                     });
-
-                    StateHasChanged();
                 }
 
                 indexOfColumnToReoder = null;
@@ -963,7 +895,7 @@ namespace Radzen.Blazor
 
         internal string GetOrderBy()
         {
-            return string.Join(",", sorts.Select(d => allColumns.ToList().Where(c => c.GetSortProperty() == d.Property).FirstOrDefault()).Where(c => c != null).Select(c => c.GetSortOrderAsString(IsOData())));
+            return string.Join(",", sorts.Select(d => columns.Where(c => c.GetSortProperty() == d.Property).FirstOrDefault()).Where(c => c != null).Select(c => c.GetSortOrderAsString(IsOData())));
         }
 
         /// <summary>
@@ -993,7 +925,7 @@ namespace Radzen.Blazor
                     return base.View;
                 }
 
-                var view = base.View.Where<TItem>(allColumns);
+                var view = base.View.Where<TItem>(columns);
                 var orderBy = GetOrderBy();
 
                 if (!string.IsNullOrEmpty(orderBy))
@@ -1116,13 +1048,6 @@ namespace Radzen.Blazor
         public EventCallback<TItem> RowExpand { get; set; }
 
         /// <summary>
-        /// Gets or sets the group row expand callback.
-        /// </summary>
-        /// <value>The group row expand callback.</value>
-        [Parameter]
-        public EventCallback<Group> GroupRowExpand { get; set; }
-
-        /// <summary>
         /// Gets or sets the row collapse callback.
         /// </summary>
         /// <value>The row collapse callback.</value>
@@ -1130,25 +1055,11 @@ namespace Radzen.Blazor
         public EventCallback<TItem> RowCollapse { get; set; }
 
         /// <summary>
-        /// Gets or sets the group row collapse callback.
-        /// </summary>
-        /// <value>The group row collapse callback.</value>
-        [Parameter]
-        public EventCallback<Group> GroupRowCollapse { get; set; }
-
-        /// <summary>
         /// Gets or sets the row render callback. Use it to set row attributes.
         /// </summary>
         /// <value>The row render callback.</value>
         [Parameter]
         public Action<RowRenderEventArgs<TItem>> RowRender { get; set; }
-
-        /// <summary>
-        /// Gets or sets the group row render callback. Use it to set group row attributes.
-        /// </summary>
-        /// <value>The group row render callback.</value>
-        [Parameter]
-        public Action<GroupRowRenderEventArgs> GroupRowRender { get; set; }
 
         /// <summary>
         /// Gets or sets the cell render callback. Use it to set cell attributes.
@@ -1205,8 +1116,8 @@ namespace Radzen.Blazor
 
             if (resetColumnState)
             {
-                allColumns.ToList().ForEach(c => { c.SetFilterValue(null); c.SetFilterValue(null, false); c.SetSecondFilterOperator(FilterOperator.Equals); });
-                allColumns.ToList().ForEach(c => { c.ResetSortOrder(); });
+                columns.ForEach(c => { c.SetFilterValue(null); c.SetSecondFilterOperator(FilterOperator.Equals); });
+                columns.ForEach(c => { c.ResetSortOrder(); });
                 sorts.Clear();
            }
         }
@@ -1279,12 +1190,12 @@ namespace Radzen.Blazor
             Query.Top = PageSize;
             Query.OrderBy = orderBy;
 
-            var filterString = allColumns.ToList().ToFilterString<TItem>();
+            var filterString = columns.ToFilterString<TItem>();
             Query.Filter = filterString;
 
             if (LoadData.HasDelegate)
             {
-                var filters = allColumns.ToList().Where(c => c.Filterable && c.Visible && (c.GetFilterValue() != null
+                var filters = columns.Where(c => c.Filterable && c.Visible && (c.GetFilterValue() != null
                         || c.GetFilterOperator() == FilterOperator.IsNotNull || c.GetFilterOperator() == FilterOperator.IsNull)).Select(c => new FilterDescriptor()
                         {
                             Property = c.GetFilterProperty(),
@@ -1300,7 +1211,7 @@ namespace Radzen.Blazor
                     Skip = start,
                     Top = top,
                     OrderBy = orderBy,
-                    Filter = IsOData() ? allColumns.ToList().ToODataFilterString<TItem>() : filterString,
+                    Filter = IsOData() ? columns.ToODataFilterString<TItem>() : filterString,
                     Filters = filters,
                     Sorts = sorts
                 });
@@ -1332,29 +1243,24 @@ namespace Radzen.Blazor
 
         internal Dictionary<RadzenDataGridGroupRow<TItem>, bool> collapsedGroupItems = new Dictionary<RadzenDataGridGroupRow<TItem>, bool>();
 
-        internal string ExpandedGroupItemStyle(RadzenDataGridGroupRow<TItem> item, bool? expandedOnLoad)
+        internal string ExpandedGroupItemStyle(RadzenDataGridGroupRow<TItem> item)
         {
-            return collapsedGroupItems.Keys.Contains(item) || expandedOnLoad == false ? "rz-row-toggler rzi-grid-sort rzi-chevron-circle-right" : "rz-row-toggler rzi-grid-sort rzi-chevron-circle-down";
+            return collapsedGroupItems.Keys.Contains(item) ? "rz-row-toggler rzi-grid-sort  rzi-chevron-circle-right" : "rz-row-toggler rzi-grid-sort  rzi-chevron-circle-down";
         }
 
         internal bool IsGroupItemExpanded(RadzenDataGridGroupRow<TItem> item)
         {
-            return !collapsedGroupItems.Keys.Contains(item);
+            return !collapsedGroupItems.Keys.Contains(item) ;
         }
 
-        internal async System.Threading.Tasks.Task ExpandGroupItem(RadzenDataGridGroupRow<TItem> item, bool? expandedOnLoad)
+        internal async System.Threading.Tasks.Task ExpandGroupItem(RadzenDataGridGroupRow<TItem> item)
         {
-            if (expandedOnLoad != null)
-                return;
-
             if (!collapsedGroupItems.Keys.Contains(item))
             {
-                await GroupRowCollapse.InvokeAsync(item.Group);
                 collapsedGroupItems.Add(item, true);
             }
             else
             {
-                await GroupRowExpand.InvokeAsync(item.Group);
                 collapsedGroupItems.Remove(item);
             }
 
@@ -1390,20 +1296,8 @@ namespace Radzen.Blazor
             return new Tuple<Radzen.RowRenderEventArgs<TItem>, IReadOnlyDictionary<string, object>>(args, new System.Collections.ObjectModel.ReadOnlyDictionary<string, object>(args.Attributes));
         }
 
-        internal Tuple<GroupRowRenderEventArgs, IReadOnlyDictionary<string, object>> GroupRowAttributes(RadzenDataGridGroupRow<TItem> item)
-        {
-            var args = new Radzen.GroupRowRenderEventArgs() { Group = item.Group, FirstRender = firstRender };
-
-            if (GroupRowRender != null)
-            {
-                GroupRowRender(args);
-            }
-
-            return new Tuple<GroupRowRenderEventArgs, IReadOnlyDictionary<string, object>>(args, new System.Collections.ObjectModel.ReadOnlyDictionary<string, object>(args.Attributes));
-        }
-
         private bool visibleChanged = false;
-        internal bool firstRender = true;
+        private bool firstRender = true;
 
         /// <inheritdoc />
         public override async Task SetParametersAsync(ParameterView parameters)
@@ -1504,13 +1398,6 @@ namespace Radzen.Blazor
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether DataGrid row can be selected on row click.
-        /// </summary>
-        /// <value><c>true</c> if DataGrid row can be selected on row click; otherwise, <c>false</c>.</value>
-        [Parameter]
-        public bool AllowRowSelectOnRowClick { get; set; } = true;
-
-        /// <summary>
         /// Gets or sets the selection mode.
         /// </summary>
         /// <value>The selection mode.</value>
@@ -1525,10 +1412,7 @@ namespace Radzen.Blazor
         internal async Task OnRowClick(DataGridRowMouseEventArgs<TItem> args)
         {
             await RowClick.InvokeAsync(args);
-            if (AllowRowSelectOnRowClick)
-            {
-                await OnRowSelect(args.Data);
-            }
+            await OnRowSelect(args.Data);
         }
 
         internal async System.Threading.Tasks.Task OnRowSelect(object item, bool raiseChange = true)
@@ -1836,7 +1720,7 @@ namespace Radzen.Blazor
         {
             if (!AllowMultiColumnSorting)
             {
-                foreach (var c in allColumns.ToList().Where(c => c != column))
+                foreach (var c in columns.Where(c => c != column))
                 {
                     c.SetSortOrder(null);
                 }
@@ -1904,7 +1788,7 @@ namespace Radzen.Blazor
                     var descriptor = groups.Where(d => d.Property == column.GetGroupProperty()).FirstOrDefault();
                     if (descriptor == null)
                     {
-                        descriptor = new GroupDescriptor() { Property = column.GetGroupProperty(), Title = column.Title, SortOrder = column.GetSortOrder()  };
+                        descriptor = new GroupDescriptor() { Property = column.GetGroupProperty(), Title = column.Title };
                         groups.Add(descriptor);
                         _groupedPagedView = null;
 
@@ -1927,8 +1811,7 @@ namespace Radzen.Blazor
         {
             var p = IsOData() ? property.Replace('.', '/') : PropertyAccess.GetProperty(property);
 
-            var column = allColumns.ToList().Where(c => c.GetSortProperty() == property).FirstOrDefault();
-
+            var column = columns.Where(c => c.GetSortProperty() == property).FirstOrDefault();
             if (column != null)
             {
                 SetColumnSortOrder(column);
@@ -1948,7 +1831,7 @@ namespace Radzen.Blazor
         /// <param name="property">The property name.</param>
         public void OrderByDescending(string property)
         {
-            var column = allColumns.ToList().Where(c => c.GetSortProperty() == property).FirstOrDefault();
+            var column = columns.Where(c => c.GetSortProperty() == property).FirstOrDefault();
             if (column != null)
             {
                 column.SetSortOrder(SortOrder.Descending);
@@ -2006,13 +1889,11 @@ namespace Radzen.Blazor
 
             if (IsJSRuntimeAvailable)
             {
-                foreach (var column in allColumns.ToList().Where(c => c.Visible))
+                foreach (var column in columns.Where(c => c.Visible))
                 {
                     JSRuntime.InvokeVoidAsync("Radzen.destroyPopup", $"{PopupID}{column.GetFilterProperty()}");
                 }
             }
         }
-
-        internal int deepestChildColumnLevel;
     }
 }
