@@ -24,6 +24,7 @@ namespace RadzenBlazorDemos
             services.AddScoped<ThemeService>();
             services.AddScoped<ExampleService>();
 
+            services.AddScoped<FileService>();
             services.AddScoped<NorthwindContext>();
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();

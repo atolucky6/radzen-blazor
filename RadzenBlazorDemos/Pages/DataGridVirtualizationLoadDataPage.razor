@@ -1,21 +1,37 @@
 ﻿@page "/datagrid-virtualization-loaddata"
 @using System.Linq.Dynamic.Core
 @using RadzenBlazorDemos.Data
+@using RadzenBlazorDemos.Services
 @using RadzenBlazorDemos.Models.Northwind
 @using Microsoft.EntityFrameworkCore
 
 @inject NorthwindContext dbContext
+@inject FileService fileService
 
 <h1>DataGrid <strong>Custom Virtualization</strong></h1>
 
 <p>
-    RadzenDataGrid supports virtualization with custom data-binding scenarios. Handle the <code>LoadData</code> event as usual.
+    RadzenDataGrid supports virtualization with custom data-binding scenarios. Handle the <code>LoadData</code> event as usual. 
+    @(fileService.GetText())
 </p>
 <RadzenExample Name="DataGrid" Source="DataGridVirtualizationLoadData" Heading="false">
-    <RadzenDataGrid Data="@orderDetails" Count="@count" LoadData="@LoadData" TItem="OrderDetail" AllowVirtualization="true" Style="height:400px"
+    <RadzenDataGrid @ref="grid" Data="@orderDetails" Count="@count" LoadData="@LoadData" TItem="OrderDetail" AllowVirtualization="true" Style="height:900px"
+                    SelectionMode="DataGridSelectionMode.Multiple"
+                    AllowRowSelectOnRowClick="true"
+                    @bind-Value=@selectedValues
                     AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or"
                     AllowSorting="true">
         <Columns>
+            <RadzenDataGridColumn TItem="OrderDetail" Width="40px" Sortable="false" Filterable="false">
+                @*<HeaderTemplate>
+                    <RadzenCheckBox TriState="false" TValue="bool" Value="@(orderDetails.Any(i => selectedValues != null && selectedValues.Contains(i)))"
+                                    Change="@(args => selectedValues = args ? orderDetails.ToList() : null)" />
+                </HeaderTemplate>*@
+                <Template Context="data">
+                    <RadzenCheckBox TriState="false" Value="@(selectedValues != null && selectedValues.Contains(data))"
+                                    TValue="bool" Change=@(args => { if(!true) { grid.SelectRow(data); }}) />
+                </Template>
+            </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="OrderDetail" Property="OrderID" Title="OrderID" />
             <RadzenDataGridColumn TItem="OrderDetail" Property="ProductID" Title="ProductID" />
             <RadzenDataGridColumn TItem="OrderDetail" Property="UnitPrice" Title="Unit Price">
@@ -34,7 +50,10 @@
 </RadzenExample>
 @code {
     int count;
+    RadzenDataGrid<OrderDetail> grid;
     IEnumerable<OrderDetail> orderDetails;
+
+    IList<OrderDetail> selectedValues;
 
     void LoadData(LoadDataArgs args)
     {

@@ -111,6 +111,15 @@ namespace Radzen.Blazor
         }
 
         /// <summary>
+        /// Clear value of input
+        /// </summary>
+        /// <returns></returns>
+        public Task ClearValue()
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
         /// Gets or sets the error callback.
         /// </summary>
         /// <value>The error callback.</value>

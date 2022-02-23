@@ -40,9 +40,8 @@ namespace RadzenBlazorDemos
 
         public void Change(NavigationManager navigationManager, string theme)
         {
-            var url = navigationManager.GetUriWithQueryParameter(QueryParameter, theme);
-
-            navigationManager.NavigateTo(url, true);
+            //var url = navigationManager.GetUriWithQueryParameter(QueryParameter, theme);
+            //navigationManager.NavigateTo(url, true);
         }
     }
 }

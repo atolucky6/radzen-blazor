@@ -1595,6 +1595,37 @@ namespace Radzen.Blazor
             await OnRowSelect(item, true);
         }
 
+        /// <summary>
+        /// Selects the row and deselect other
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="deselectOther"></param>
+        /// <returns></returns>
+        public async System.Threading.Tasks.Task SelectRow(TItem item, bool deselectOther)
+        {
+            await OnRowSelect(item, true);
+        }
+
+        /// <summary>
+        /// Deselect the row
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public Task DeselectRow(TItem item)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Check the row is selected
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool IsRowSelected(TItem item)
+        {
+            return false;
+        }
+
         internal async System.Threading.Tasks.Task OnRowDblClick(DataGridRowMouseEventArgs<TItem> args)
         {
             await RowDoubleClick.InvokeAsync(args);
